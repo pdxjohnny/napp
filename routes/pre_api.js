@@ -21,8 +21,8 @@ if ( typeof config.api.auth !== "undefined" &&
   config.api.auth === "basic" )
 {
   router.use(function(req, res, next) {
-    var auth;
-    // check whether an authorization header was send    
+    var auth = false;
+    // check whether an authorization header was send
     if (req.headers.authorization)
     {
       // only accepting basic auth, so:
@@ -31,15 +31,15 @@ if ( typeof config.api.auth !== "undefined" &&
       // * split the string at the colon
       // -> should result in an array
       auth = new Buffer(req.headers.authorization.substring(6), 'base64').toString().split(':');
+      // checks if:
+      // * auth array exists
+      // * first value matches the expected user
+      // * second value the expected password
+      // Add them to req for acess by subsequent functions
+      req.username = auth[0]
+      req.password = auth[1]
     }
 
-    // checks if:
-    // * auth array exists 
-    // * first value matches the expected user 
-    // * second value the expected password
-    // Add them to req for acess by subsequent functions
-    req.username = auth[0]
-    req.password = auth[1]
     if (!auth)
     {
       // any of the tests failed
