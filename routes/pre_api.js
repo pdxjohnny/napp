@@ -36,8 +36,9 @@ if ( typeof config.api.auth !== "undefined" &&
       // * first value matches the expected user
       // * second value the expected password
       // Add them to req for acess by subsequent functions
-      req.username = auth[0]
-      req.password = auth[1]
+      req.username = auth[0];
+      req.password = auth[1];
+      req.encoded_auth = req.headers.authorization.substring(6);
     }
 
     if (!auth)
@@ -46,7 +47,7 @@ if ( typeof config.api.auth !== "undefined" &&
       // send an Basic Auth request (HTTP Code: 401 Unauthorized)
       res.statusCode = 401;
       // MyRealmName can be changed to anything, will be prompted to the user
-      res.setHeader('WWW-Authenticate', 'Basic realm="MyRealmName"');
+      res.setHeader('WWW-Authenticate', 'Basic realm="NappRealm"');
       // this will displayed in the browser when authorization is cancelled
       res.end('Unauthorized');
     }
